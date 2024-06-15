@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"go-crud-app/database"
@@ -15,7 +16,6 @@ func initApp() error {
 	}
 
 	err = database.OpenConnection()
-
 	if err != nil {
 		return err
 	}
@@ -25,6 +25,7 @@ func initApp() error {
 
 func loadEnv() error {
 	err := godotenv.Load()
+	fmt.Printf("%+v\n", err)
 	if err != nil {
 		return err
 	}

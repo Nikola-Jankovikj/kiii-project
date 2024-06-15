@@ -1,4 +1,4 @@
-FROM golang:1.21-alpine
+FROM --platform=linux/arm64/v8 golang:1.21-alpine AS builder
 
 RUN apk add --no-cache git
 
@@ -11,6 +11,13 @@ RUN go mod download
 COPY go-crud-app/ .
 
 RUN go build -o main .
+
+FROM --platform=linux/arm64/v8 alpine:latest
+
+WORKDIR /app
+
+COPY --from=builder /app/main .
+COPY --from=builder /app/.env . 
 
 EXPOSE 8080
 
