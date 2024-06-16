@@ -17,7 +17,6 @@ FROM --platform=linux/arm64/v8 alpine:latest
 WORKDIR /app
 
 COPY --from=builder /app/main .
-COPY --from=builder /app/.env . 
 
 EXPOSE 8080
 
