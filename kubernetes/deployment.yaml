@@ -8,7 +8,7 @@ spec:
   selector:
     matchLabels:
       app: go-crud-app
-  strategy: 
+  strategy:
     type: RollingUpdate
     rollingUpdate:
       maxUnavailable: 1
@@ -18,6 +18,21 @@ spec:
       labels:
         app: go-crud-app
     spec:
+      initContainers:
+      - name: wait-for-postgres
+        image: busybox
+        command: ['sh', '-c', 'until nc -z -v -w30 $(DB_HOST) $(DB_PORT); do echo "Waiting for database..."; sleep 5; done']
+        env:
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: db-config
+              key: DB_HOST
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: db-config
+              key: DB_PORT
       containers:
       - name: go-crud-app
         image: nikolajankovikj/go-crud-app:latest
